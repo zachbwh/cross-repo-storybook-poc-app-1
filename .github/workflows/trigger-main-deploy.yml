@@ -1,0 +1,19 @@
+name: Trigger Main Storybook Deploy
+description: Triggers the deploy action from the main storybook repo
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Trigger-Repository-Dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Repository Dispatch
+        run: >
+        curl -L
+          -X POST
+          -H "Accept: application/vnd.github+json"
+          -H "Authorization: Bearer ${{ secrets.MAIN_STORYBOOK_REPO_PAT }}"
+          -H "X-GitHub-Api-Version: 2022-11-28"
+          https://api.github.com/repos/zachbwh/cross-repo-storybook-poc-main/dispatches
+          -d '{"event_type":"app_storybook_updated","client_payload":{"unit":false,"integration":true}}'
